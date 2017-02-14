@@ -1,12 +1,16 @@
 import Html exposing (..)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
+import Process exposing (..)
+import Task exposing (..)
+import Time exposing (..)
 
 main =
-  Html.beginnerProgram
-    { model = model
+  program
+    { init = init
     , update = update
     , view = view
+    , subscriptions = always Sub.none
     }
 
 
@@ -15,35 +19,48 @@ main =
 
 type alias Model = Int
 
-model : Model
-model = 0
+initialModel : Model
+initialModel = 0
 
 type Msg
   = Increment
   | Decrement
   | IncrementIfOdd
   | Reset
+  | IncrementAsync
 
+
+
+init : ( Model, Cmd Msg )
+init = ( initialModel, Cmd.none )
+
+
+asyncIncrement : Cmd Msg
+asyncIncrement =
+  sleep second
+  |> perform (\_ -> Increment)
 
 
 -- UPDATE
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
   case msg of
     Increment ->
-      model + 1
+      ( model + 1, Cmd.none )
 
     Decrement ->
-      model - 1
+      ( model - 1, Cmd.none )
 
     IncrementIfOdd ->
       if model % 2 == 0 then
-        model
+        ( model, Cmd.none )
       else
-        model + 1
+        ( model + 1, Cmd.none )
 
-    Reset -> 0
+    Reset -> ( 0, Cmd.none )
+
+    IncrementAsync -> ( model, asyncIncrement )
 
 
 
@@ -73,6 +90,7 @@ view model =
             [ button [ onClick Increment ] [ text "+" ]
             , button [ onClick Decrement ] [ text "-" ]
             , button [ onClick IncrementIfOdd ] [ text "+ if odd" ]
+            , button [ onClick IncrementAsync ] [ text "+ async" ]
             , button [ onClick Reset ] [ text "reset" ]
             ]
       ]
