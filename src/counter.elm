@@ -14,9 +14,6 @@ main =
     }
 
 
-
--- MODEL
-
 type alias Model = Int
 
 initialModel : Model
@@ -30,7 +27,6 @@ type Msg
   | IncrementAsync
 
 
-
 init : ( Model, Cmd Msg )
 init = ( initialModel, Cmd.none )
 
@@ -40,8 +36,6 @@ asyncIncrement =
   sleep second
   |> perform (\_ -> Increment)
 
-
--- UPDATE
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -63,9 +57,6 @@ update msg model =
     IncrementAsync -> ( model, asyncIncrement )
 
 
-
--- VIEW
-
 containerStyle : Attribute Msg
 containerStyle =
   style
@@ -85,12 +76,12 @@ headerStyle =
 view : Model -> Html Msg
 view model =
   div [ containerStyle ]
-      [ h1 [ headerStyle ] [ text (toString model) ]
-      , div [ containerStyle ]
-            [ button [ onClick Increment ] [ text "+" ]
-            , button [ onClick Decrement ] [ text "-" ]
-            , button [ onClick IncrementIfOdd ] [ text "+ if odd" ]
-            , button [ onClick IncrementAsync ] [ text "+ async" ]
-            , button [ onClick Reset ] [ text "reset" ]
-            ]
-      ]
+    [ h1 [ headerStyle ] [ text (toString model) ]
+    , div [ containerStyle ]
+        [ button [ onClick Increment ] [ text "+" ]
+        , button [ onClick Decrement ] [ text "-" ]
+        , button [ onClick IncrementIfOdd ] [ text "+ if odd" ]
+        , button [ onClick IncrementAsync ] [ text "+ async" ]
+        , button [ onClick Reset ] [ text "reset" ]
+        ]
+    ]

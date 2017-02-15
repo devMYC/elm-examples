@@ -31,7 +31,7 @@ intro = """
 
 - __Code__
 
-```
+```javascript
       const func = () => {
         setTimeout(() => console.log('task queue'), 0)
         Promise.resolve()
